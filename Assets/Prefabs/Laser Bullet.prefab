@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LaserSpeed: 20
+  Damage: 0.01
   Parent: {fileID: 0}
 --- !u!212 &212462840188282870
 SpriteRenderer:

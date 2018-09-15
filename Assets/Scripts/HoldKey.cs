@@ -36,6 +36,7 @@ public class HoldKey : MonoBehaviour
                     // Both are ready
                     _Controls.Play("Close");
                     gameObject.SetActive(false);
+                    Global.Playable = true;
                 }
             }
         }
