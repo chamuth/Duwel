@@ -21,9 +21,11 @@ public class Player : MonoBehaviour {
 
     [Header("GameObject Connections")]
     public Text PlayerScore;
+    public Image HealthProgress;
 
     [Header("Prefab Connections")]
     public GameObject LaserBullet;
+    public GameObject LaserHitEmission;
 
     private Rigidbody2D rb2;
     private float _laserDelay = 0;
@@ -37,11 +39,36 @@ public class Player : MonoBehaviour {
 
     public void ShootLaser()
     {
-        Instantiate(LaserBullet, transform.position, transform.rotation);
+        var x = Instantiate(LaserBullet, transform.position, transform.rotation);
+        x.GetComponent<Laser>().Parent = gameObject;
+    }
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        var laser = coll.gameObject.GetComponent<Laser>();
+        if (laser.Parent != gameObject)
+        {
+            if (coll.gameObject.tag == "Laser")
+            {
+                // Emmit the streaks
+                Instantiate(LaserHitEmission, coll.transform.position, coll.transform.rotation);
+                // Damage the player
+                Health -= laser.Damage;
+                // Add score to sender
+                laser.Parent.GetComponent<Player>().Score += 5;
+            }
+
+            // Destroy the laser
+            Destroy(coll.gameObject);
+        }
     }
 
     public void Update()
     {
+        // Display the health for the player
+        HealthProgress.fillAmount = Health;
+        PlayerScore.text = Score.ToString() + " PTS";
+
         switch (InputType)
         {
             case Controller.Keyboard:
